@@ -1,0 +1,44 @@
+import sklearn.cluster.KMeans
+import numpy as np
+import matplotlib.pyplot as plt
+np.random seed(42)
+X=np.array([5,8][1,2],[1.5,1.8][0.6,1][9,11])
+k means =KMeans(n_clusters=2)
+k means.fit(x)
+centroids=k means.cluster_centers_
+labels=k means.labels
+colors={"g.","r."}
+for i in range(len x)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

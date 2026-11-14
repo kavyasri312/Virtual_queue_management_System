@@ -1,3 +1,4 @@
+
 # Q-Flow: Smart Queue Management System
 
 A modern, responsive, full-stack enterprise web application for booking digital tokens, tracking live queue positions with dynamic wait-time estimation, and managing multi-department service counters in real-time.
@@ -147,3 +148,6 @@ Import `docs/Smart_Queue_API.postman_collection.json` into Postman to test all e
 ## 📐 Smart Waiting-Time Formula
 
 $$\text{Estimated Waiting Time (min)} = \max\left(2, \; \left\lceil \frac{\text{People Ahead}}{\max(1, \text{Active Counters})} \times \left(0.7 \times \bar{D}_{\text{completed today}} + 0.3 \times D_{\text{configured}}\right) \right\rceil\right)$$
+
+# Virtual_queue_management_System
+
