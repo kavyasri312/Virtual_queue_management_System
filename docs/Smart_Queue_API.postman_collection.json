@@ -1,0 +1,334 @@
+{
+  "info": {
+    "name": "Smart Queue Management System (Q-Flow) API",
+    "_postman_id": "c1f7b889-4a4e-4e67-bf01-202611140001",
+    "description": "Comprehensive REST API collection for Smart Queue Management System with JWT authentication, role management, and live queue endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "customerToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "staffToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"phone\": \"+1-555-0155\",\n  \"password\": \"Customer@123\",\n  \"confirmPassword\": \"Customer@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login - Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"Customer@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Staff (Doctor)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dr.sharma@hospital.com\",\n  \"password\": \"Staff@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@smartqueue.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Customer Operations",
+      "item": [
+        {
+          "name": "Get Available Departments",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/customer/departments", "host": ["{{baseUrl}}"], "path": ["customer", "departments"] }
+          }
+        },
+        {
+          "name": "Book Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"departmentId\": 1,\n  \"priority\": \"NORMAL\",\n  \"notes\": \"General health checkup\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/customer/tokens/book", "host": ["{{baseUrl}}"], "path": ["customer", "tokens", "book"] }
+          }
+        },
+        {
+          "name": "Get My Tokens",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/customer/tokens/my-tokens", "host": ["{{baseUrl}}"], "path": ["customer", "tokens", "my-tokens"] }
+          }
+        },
+        {
+          "name": "Get Token Live Position",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/customer/tokens/1/queue-position", "host": ["{{baseUrl}}"], "path": ["customer", "tokens", "1", "queue-position"] }
+          }
+        },
+        {
+          "name": "Cancel Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customerToken}}" }],
+            "url": { "raw": "{{baseUrl}}/customer/tokens/1/cancel", "host": ["{{baseUrl}}"], "path": ["customer", "tokens", "1", "cancel"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Staff / Operator Terminal",
+      "item": [
+        {
+          "name": "Get Staff Counter Stats & Queue",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": { "raw": "{{baseUrl}}/staff/stats", "host": ["{{baseUrl}}"], "path": ["staff", "stats"] }
+          }
+        },
+        {
+          "name": "Call Next Token (Priority Triage)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": { "raw": "{{baseUrl}}/staff/call-next", "host": ["{{baseUrl}}"], "path": ["staff", "call-next"] }
+          }
+        },
+        {
+          "name": "Recall Current Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": { "raw": "{{baseUrl}}/staff/recall", "host": ["{{baseUrl}}"], "path": ["staff", "recall"] }
+          }
+        },
+        {
+          "name": "Start Serving Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{staffToken}}" }],
+            "url": { "raw": "{{baseUrl}}/staff/start-serving", "host": ["{{baseUrl}}"], "path": ["staff", "start-serving"] }
+          }
+        },
+        {
+          "name": "Complete Token Visit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Prescription issued. Follow-up in 2 weeks.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/staff/complete", "host": ["{{baseUrl}}"], "path": ["staff", "complete"] }
+          }
+        },
+        {
+          "name": "Skip Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Customer did not respond after 3 calls.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/staff/skip", "host": ["{{baseUrl}}"], "path": ["staff", "skip"] }
+          }
+        },
+        {
+          "name": "Mark No-Show",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Customer absent.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/staff/no-show", "host": ["{{baseUrl}}"], "path": ["staff", "no-show"] }
+          }
+        },
+        {
+          "name": "Verify QR / Reference Code",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{staffToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"GM-001\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/staff/verify-token", "host": ["{{baseUrl}}"], "path": ["staff", "verify-token"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Admin Management",
+      "item": [
+        {
+          "name": "Get Dashboard Analytics & Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/stats", "host": ["{{baseUrl}}"], "path": ["admin", "stats"] }
+          }
+        },
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dermatology Clinic\",\n  \"code\": \"DERM\",\n  \"description\": \"Skin consultations and allergy treatments.\",\n  \"category\": \"HOSPITAL\",\n  \"avgServiceTimeMinutes\": 12,\n  \"dailyTokenLimit\": 80\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/departments", "host": ["{{baseUrl}}"], "path": ["admin", "departments"] }
+          }
+        },
+        {
+          "name": "Create Counter",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"counterNumber\": \"C-03\",\n  \"counterName\": \"Doctor Consultation 3\",\n  \"departmentId\": 1\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/counters", "host": ["{{baseUrl}}"], "path": ["admin", "counters"] }
+          }
+        },
+        {
+          "name": "Assign Staff to Counter",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"counterId\": 1,\n  \"staffId\": 2\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/counters/assign", "host": ["{{baseUrl}}"], "path": ["admin", "counters", "assign"] }
+          }
+        },
+        {
+          "name": "Search & Filter Tokens",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/tokens?status=WAITING", "host": ["{{baseUrl}}"], "path": ["admin", "tokens"], "query": [{ "key": "status", "value": "WAITING" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Public Endpoints",
+      "item": [
+        {
+          "name": "Public Department Overview",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/public/departments", "host": ["{{baseUrl}}"], "path": ["public", "departments"] }
+          }
+        },
+        {
+          "name": "Public Department Live Queue",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/public/queue/1", "host": ["{{baseUrl}}"], "path": ["public", "queue", "1"] }
+          }
+        },
+        {
+          "name": "Public Verify QR Code",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/public/verify/GM-001", "host": ["{{baseUrl}}"], "path": ["public", "verify", "GM-001"] }
+          }
+        }
+      ]
+    }
+  ]
+}
